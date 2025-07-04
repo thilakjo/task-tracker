@@ -1,16 +1,36 @@
 /* src/styles/TaskList.css */
+
 .task-list {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Increased spacing between TaskItem components */
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Ensure list takes full width of container */
 }
 
 .no-tasks-message {
   text-align: center;
-  color: var(--text-color); /* Uses global variable */
-  opacity: 0.7;
-  font-style: italic;
-  padding: 20px;
-  border: 1px dashed var(--border-color); /* Uses global variable */
-  border-radius: 8px;
+  color: var(--secondary-text-color);
+  font-size: 1.3em; /* Larger message */
+  padding: 40px; /* More padding */
+  background-color: rgba(var(--glass-bg-rgb), var(--glass-alpha));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 18px; /* Rounded corners */
+  box-shadow: 0 4px 15px var(--glass-shadow-color);
   margin-top: 20px;
-  transition: color 0.3s, border-color 0.3s;
+  font-weight: 500;
+}
+
+/* Responsive adjustments for the list itself are usually handled by TaskItem's responsiveness */
+@media (max-width: 600px) {
+  .task-list {
+    gap: 15px;
+  }
+
+  .no-tasks-message {
+    padding: 30px;
+    font-size: 1.1em;
+  }
 }

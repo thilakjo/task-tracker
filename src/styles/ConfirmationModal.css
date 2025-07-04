@@ -1,0 +1,110 @@
+/* src/styles/ConfirmationModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(
+    --modal-overlay-bg
+  ); /* Darker, slightly transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+  backdrop-filter: blur(5px); /* Subtle blur for overlay */
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: var(--modal-bg);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px var(--modal-shadow);
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  transform: translateY(-20px); /* Initial slight lift */
+  opacity: 0;
+  animation: fadeInModal 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy animation */
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-message {
+  font-size: 1.25em;
+  color: var(--text-color);
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.modal-confirm-button,
+.modal-cancel-button {
+  padding: 12px 25px;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-confirm-button {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.modal-confirm-button:hover {
+  background-color: var(--danger-dark-color);
+  transform: translateY(-2px);
+}
+
+.modal-cancel-button {
+  background-color: rgba(var(--glass-bg-rgb), 0.1);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+
+.modal-cancel-button:hover {
+  background-color: rgba(var(--glass-bg-rgb), 0.2);
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 500px) {
+  .modal-content {
+    padding: 20px;
+    gap: 20px;
+  }
+  .modal-message {
+    font-size: 1.1em;
+  }
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .modal-confirm-button,
+  .modal-cancel-button {
+    width: 100%;
+  }
+}

@@ -1,52 +1,86 @@
 /* src/styles/Login.css */
+
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: var(--bg-color); /* Uses global variable */
-  font-family: Arial, sans-serif;
-  transition: background-color 0.3s;
+  background-color: var(--bg-color); /* Use global background */
+  font-family: var(--font-family-base);
+  color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.login-container h2 {
+  color: var(--header-text-color);
+  margin-bottom: 35px;
+  font-size: 2.5em;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .login-form {
-  background-color: var(--card-bg-color); /* Uses global variable */
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(
+    var(--glass-bg-rgb),
+    var(--glass-alpha)
+  ); /* Translucent glass background */
+  backdrop-filter: blur(15px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(15px); /* Safari support */
+  border: 1px solid var(--glass-border-color); /* Light border for glass effect */
+  border-radius: 20px; /* More rounded corners */
+  box-shadow: 0 10px 30px var(--glass-shadow-color); /* Softer shadow */
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  width: 300px;
-  transition: background-color 0.3s;
-}
-
-.login-form h2 {
-  color: var(--text-color);
-  margin-bottom: 20px;
+  gap: 25px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
 }
 
 .login-form input[type="text"] {
-  width: calc(100% - 20px); /* Adjust for padding */
-  box-sizing: border-box; /* Include padding in width */
-  /* Other input styles inherited from App.css */
+  /* Styles are mostly inherited from App.css, just add specific margins if needed */
+  margin-bottom: 5px; /* Space before error message */
 }
 
 .login-form button {
-  background-color: var(--button-primary-bg); /* Uses global variable */
-  color: var(--button-primary-text); /* Uses global variable */
-  /* Other button styles inherited from App.css */
+  /* Inherits general button styles from App.css */
+  background-color: var(--primary-accent);
+  color: white;
+  padding: 15px 25px;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-top: 10px;
 }
 
 .login-form button:hover {
-  filter: brightness(1.1); /* Simple hover effect */
+  background-color: var(--primary-accent-dark);
 }
 
-/* Responsive adjustments */
+.error-message {
+  color: var(--danger-color);
+  font-size: 0.9em;
+  margin-top: -15px; /* Adjust spacing */
+  margin-bottom: 5px;
+  text-align: left;
+  font-weight: 500;
+}
+
 @media (max-width: 600px) {
   .login-form {
-    width: 85%;
-    padding: 20px;
+    padding: 30px 25px;
+    margin: 0 20px;
+  }
+
+  .login-container h2 {
+    font-size: 2em;
+    margin-bottom: 25px;
+  }
+
+  .login-form input,
+  .login-form button {
+    font-size: 1em;
+    padding: 12px 20px;
   }
 }

@@ -1,191 +1,219 @@
 /* src/styles/TaskItem.css */
+
 .task-item {
+  background-color: rgba(var(--glass-bg-rgb), var(--glass-alpha));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border-color);
+  border-radius: 18px; /* Rounded corners */
+  padding: 20px;
+  margin-bottom: 18px; /* Spacing between items */
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  margin-bottom: 10px;
-  background-color: var(--card-bg-color); /* Uses global variable */
-  border: 1px solid var(--border-color); /* Uses global variable */
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease-in-out, background-color 0.3s,
-    border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  gap: 25px; /* More gap */
+  box-shadow: 0 5px 15px var(--glass-shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.4s ease, border-color 0.4s ease;
 }
 
 .task-item:hover {
-  transform: translateY(-2px); /* Subtle lift on hover */
+  transform: translateY(-4px); /* More pronounced lift */
+  box-shadow: 0 10px 25px var(--glass-shadow-color);
 }
 
-/* Styling for completed tasks */
+/* Completed Task Visuals */
 .task-item.completed {
-  background-color: var(--completed-bg); /* Uses global variable */
-  border-left: 5px solid var(--completed-border); /* Green border for completed */
-  opacity: 0.8;
+  background-color: var(--completed-bg);
+  border-left: 8px solid var(--completed-border);
+  opacity: 0.9; /* Slightly more opaque when completed */
 }
 
 .task-item.completed h3 {
-  text-decoration: line-through; /* Strikethrough for completed title */
-  color: var(--text-color); /* Ensure readability in dark mode */
+  color: var(--secondary-text-color); /* Greyed out completed text */
+  text-decoration: line-through;
 }
 
-.task-item.completed p {
-  color: var(--text-color); /* Ensure readability in dark mode */
+/* Priority Visuals - Border right */
+.task-item.priority-low {
+  border-right: 4px solid var(--priority-low-border);
+}
+.task-item.priority-medium {
+  border-right: 4px solid var(--priority-medium-border);
+}
+.task-item.priority-high {
+  border-right: 4px solid var(--priority-high-border);
 }
 
+/* Content Area */
 .task-content {
   flex-grow: 1;
-  margin-right: 15px;
-  text-align: left; /* Align text left */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* More spacing */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  text-align: left; /* Align text to left within task item */
 }
 
 .task-content h3 {
-  margin: 0 0 5px 0;
-  color: var(--text-color); /* Uses global variable */
-  font-size: 18px;
-}
-
-.task-content p {
   margin: 0;
-  color: var(--text-color); /* Uses global variable */
-  font-size: 14px;
-  line-height: 1.4;
-  word-wrap: break-word; /* Ensure long descriptions wrap */
+  font-size: 1.7em;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
-.task-date,
-.task-priority {
-  font-size: 12px;
-  color: var(--placeholder-color); /* Uses global variable */
-  margin-top: 5px;
-  display: block;
+.task-description {
+  font-size: 0.95em;
+  color: var(--secondary-text-color);
+  line-height: 1.6;
 }
 
-.task-priority {
-  font-weight: bold; /* Make priority stand out */
-  margin-bottom: 3px;
+.task-priority,
+.task-date {
+  font-size: 0.88em;
+  color: var(--secondary-text-color);
+  margin-right: 12px;
+  display: inline-block;
+  font-weight: 500;
 }
 
-/* Priority specific left border styling */
-.task-item.priority-low {
-  border-left-color: #6c757d;
-} /* Grey */
-.task-item.priority-medium {
-  border-left-color: #ffc107;
-} /* Orange */
-.task-item.priority-high {
-  border-left-color: #dc3545;
-} /* Red */
-
-.task-actions {
+.task-tags {
+  margin-top: 10px;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
-.task-actions input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin-right: 5px;
+.tag-pill {
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  padding: 6px 12px;
+  border-radius: 15px; /* More rounded */
+  font-size: 0.8em;
+  font-weight: 600;
+  border: 1px solid var(--tag-border);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.task-actions button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
+/* Edit Mode Inputs */
+.task-item .edit-input,
+.task-item .edit-textarea,
+.task-item .edit-select,
+.task-item .react-datepicker-wrapper input {
+  /* Inherits from App.css */
+  margin-bottom: 8px; /* Add some margin */
+}
+
+.task-item .edit-textarea {
+  min-height: 80px;
+}
+
+.error-message {
+  color: var(--danger-color);
+  font-size: 0.85em;
+  margin-top: -5px;
+  margin-bottom: 5px;
+  text-align: left;
+  font-weight: 500;
+}
+
+/* Actions Area */
+.task-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px; /* Spacing between action elements */
+  flex-shrink: 0;
+}
+
+.task-actions input[type="checkbox"] {
+  transform: scale(1.6); /* Larger checkbox */
+  margin: 5px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s, color 0.2s; /* Smooth transition */
+  accent-color: var(--primary-accent); /* Color the checkbox */
+  min-width: 25px; /* Ensure it's clickable */
+  min-height: 25px;
+}
+
+/* Action Buttons */
+.task-actions button {
+  /* Inherits general button styles */
+  padding: 10px 18px;
+  font-size: 0.9em;
+  font-weight: 500;
+  width: 100px; /* Consistent width */
 }
 
 .edit-button {
-  background-color: #ffc107; /* Consistent color for edit */
-  color: #333;
+  background-color: var(--info-color);
+  color: white;
 }
 .edit-button:hover {
-  background-color: #e0a800;
+  background-color: var(--info-dark-color);
 }
 
 .save-button {
-  background-color: #28a745; /* Consistent color for save */
+  background-color: var(--primary-accent);
   color: white;
 }
 .save-button:hover {
-  background-color: #218838;
+  background-color: var(--primary-accent-dark);
 }
 
 .delete-button {
-  background-color: #dc3545; /* Consistent color for delete */
+  background-color: var(--danger-color);
   color: white;
 }
 .delete-button:hover {
-  background-color: #c82333;
-}
-
-/* Styles for inputs/select in edit mode */
-.edit-input,
-.edit-textarea,
-.edit-select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 5px;
-  /* Other input styles inherited from App.css */
-  box-sizing: border-box; /* Ensure padding is included */
-}
-
-.edit-textarea {
-  min-height: 60px;
-  resize: vertical;
-}
-
-/* Tags styling */
-.task-tags {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.tag-pill {
-  display: inline-block;
-  background-color: var(--button-primary-bg); /* Use primary button color */
-  color: var(--button-primary-text); /* Use primary button text color */
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  white-space: nowrap; /* Prevent tag text from wrapping */
-  transition: background-color 0.3s, color 0.3s;
+  background-color: var(--danger-dark-color);
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .task-item {
     flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-  }
-
-  .task-content {
-    margin-right: 0;
-    margin-bottom: 10px;
-    width: 100%;
+    align-items: stretch;
+    gap: 20px;
+    padding: 18px;
   }
 
   .task-actions {
-    width: 100%;
+    flex-direction: row;
     justify-content: flex-end;
-    gap: 5px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .task-actions input[type="checkbox"] {
+    order: -1;
+    margin-right: auto;
+    margin-left: 0;
   }
 
   .task-actions button {
-    padding: 6px 10px;
-    font-size: 12px;
+    width: auto;
+    flex-grow: 1;
+    min-width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-item {
+    padding: 15px;
+    gap: 15px;
   }
 
-  .edit-input,
-  .edit-textarea,
-  .edit-select {
-    font-size: 14px;
+  .task-content h3 {
+    font-size: 1.5em;
+  }
+
+  .task-description,
+  .task-priority,
+  .task-date,
+  .tag-pill {
+    font-size: 0.8em;
   }
 }

@@ -1,41 +1,61 @@
 // src/components/TaskForm.js
 import React, { useState } from "react";
+import DatePicker from "react-datepicker"; // Import DatePicker
+import "react-datepicker/dist/react-datepicker.css"; // Default DatePicker styles
 import "./../styles/TaskForm.css"; // Component-specific styling
 
 const TaskForm = ({ addTask }) => {
-  const [title, setTitle] = useState(""); // State for task title
-  const [description, setDescription] = useState(""); // State for task description
-  const [priority, setPriority] = useState("Medium"); // State for task priority
-  const [dueDate, setDueDate] = useState(""); // State for due date
-  const [tags, setTags] = useState(""); // State for comma-separated tags
-  const [error, setError] = useState(""); // State for displaying form error
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("Medium");
+  const [dueDate, setDueDate] = useState(null);
+  const [tags, setTags] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
-      setError("Task title is required!"); // Set error message if title is empty
+      setError("Task title is required!");
       return;
     }
 
-    setError(""); // Clear any previous error
+    setError("");
 
-    // Split tags string into an array, clean, and filter empty strings
     const tagsArray = tags
       .split(",")
       .map((tag) => tag.trim())
       .filter((tag) => tag !== "");
 
-    // Call addTask from props, passing all new fields
-    addTask(trimmedTitle, description.trim(), priority, dueDate, tagsArray);
+    addTask(
+      trimmedTitle,
+      description.trim(),
+      priority,
+      dueDate ? dueDate.toISOString() : null,
+      tagsArray
+    );
 
-    // Reset form fields after submission
+    // Reset form fields
     setTitle("");
     setDescription("");
     setPriority("Medium");
-    setDueDate("");
+    setDueDate(null);
     setTags("");
+  };
+
+  // Helper functions for Today/Tomorrow
+  const setToday = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to start of day
+    setDueDate(today);
+  };
+
+  const setTomorrow = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0); // Normalize to start of day
+    setDueDate(tomorrow);
   };
 
   return (
@@ -46,9 +66,9 @@ const TaskForm = ({ addTask }) => {
         value={title}
         onChange={(e) => {
           setTitle(e.target.value);
-          if (error) setError(""); // Clear error when user types
+          if (error) setError("");
         }}
-        required // HTML5 required attribute
+        required
         aria-label="Task Title"
         aria-describedby={error ? "task-title-error" : undefined}
       />
@@ -63,7 +83,6 @@ const TaskForm = ({ addTask }) => {
         onChange={(e) => setDescription(e.target.value)}
         aria-label="Task Description"
       ></textarea>
-      {/* Priority selection */}
       <select
         value={priority}
         onChange={(e) => setPriority(e.target.value)}
@@ -73,15 +92,39 @@ const TaskForm = ({ addTask }) => {
         <option value="Medium">Medium Priority</option>
         <option value="High">High Priority</option>
       </select>
-      {/* Due Date input */}
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        title="Due Date (optional)"
-        aria-label="Due Date"
-      />
-      {/* Tags input */}
+
+      {/* New date selection options */}
+      <div className="date-input-group">
+        <DatePicker
+          selected={dueDate}
+          onChange={(date) => setDueDate(date)}
+          placeholderText="Select Due Date (optional)"
+          dateFormat="yyyy/MM/dd"
+          isClearable
+          showYearDropdown
+          scrollableYearDropdown
+          yearDropdownItemNumber={15}
+          className="date-picker-input"
+          aria-label="Due Date"
+        />
+        <div className="quick-date-buttons">
+          <button
+            type="button"
+            onClick={setToday}
+            className="info-button small-button"
+          >
+            Today
+          </button>
+          <button
+            type="button"
+            onClick={setTomorrow}
+            className="info-button small-button"
+          >
+            Tomorrow
+          </button>
+        </div>
+      </div>
+
       <input
         type="text"
         placeholder="Tags (comma-separated, e.g., work, personal)"
@@ -89,7 +132,9 @@ const TaskForm = ({ addTask }) => {
         onChange={(e) => setTags(e.target.value)}
         aria-label="Task Tags"
       />
-      <button type="submit">Add Task</button>
+      <button type="submit" className="primary-button">
+        Add Task
+      </button>
     </form>
   );
 };

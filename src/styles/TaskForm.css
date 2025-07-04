@@ -1,46 +1,61 @@
-/* src/styles/TaskForm.css */
-.task-form {
+/* src/styles/TaskForm.css (add to existing file) */
+
+.date-input-group {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px solid var(--border-color); /* Uses global variable */
-  border-radius: 8px;
-  background-color: var(--card-bg-color); /* Uses global variable */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  gap: 10px; /* Space between date picker and buttons */
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
-.task-form input[type="text"],
-.task-form textarea,
-.task-form select,
-.task-form input[type="date"] {
-  width: calc(100% - 20px); /* Adjust for padding */
-  box-sizing: border-box; /* Include padding in width */
-  /* Other input styles inherited from App.css */
-  resize: vertical; /* Allow vertical resizing for textarea */
+/* Ensure the date picker input itself still takes full width within its flex item */
+.date-input-group .react-datepicker-wrapper {
+  flex-grow: 1; /* Allow date picker to grow */
+  min-width: 180px; /* Minimum width for the input */
 }
 
-.task-form button {
-  background-color: var(--button-primary-bg); /* Uses global variable */
-  color: var(--button-primary-text); /* Uses global variable */
-  /* Other button styles inherited from App.css */
+.date-input-group .date-picker-input {
+  width: 100%; /* Ensure input fills its wrapper */
 }
 
-.task-form button:hover {
-  filter: brightness(1.1); /* Simple hover effect */
+.quick-date-buttons {
+  display: flex;
+  gap: 8px; /* Space between "Today" and "Tomorrow" buttons */
+  flex-shrink: 0; /* Prevent buttons from shrinking */
 }
 
-/* Responsive adjustments */
+.quick-date-buttons .small-button {
+  padding: 8px 15px; /* Smaller padding for these buttons */
+  font-size: 0.85em; /* Smaller font size */
+  border-radius: 8px; /* Slightly less rounded than main buttons */
+  background-color: rgba(var(--primary-accent), 0.1);
+  color: var(--primary-accent);
+  border: 1px solid rgba(var(--primary-accent), 0.3);
+  box-shadow: none; /* No shadow for these */
+}
+
+.quick-date-buttons .small-button:hover {
+  background-color: var(--primary-accent);
+  color: white;
+  border-color: var(--primary-accent);
+  transform: translateY(-1px); /* Subtle lift */
+  box-shadow: 0 2px 5px rgba(var(--primary-accent), 0.2);
+}
+
+/* Responsive adjustments for date input group */
 @media (max-width: 600px) {
-  .task-form {
-    padding: 10px;
+  .date-input-group {
+    flex-direction: column;
+    align-items: stretch;
   }
-  .task-form input,
-  .task-form textarea,
-  .task-form select,
-  .task-form button {
-    font-size: 14px;
+  .date-input-group .react-datepicker-wrapper {
+    width: 100%;
+    min-width: unset;
+  }
+  .quick-date-buttons {
+    width: 100%;
+    justify-content: stretch; /* Stretch buttons to fill width */
+  }
+  .quick-date-buttons .small-button {
+    flex-grow: 1; /* Allow buttons to grow and fill space */
   }
 }

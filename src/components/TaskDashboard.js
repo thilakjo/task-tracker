@@ -3,26 +3,30 @@ import React, { useState, useEffect, useRef } from "react";
 import TaskForm from "./TaskForm"; // For adding new tasks
 import TaskList from "./TaskList"; // For displaying tasks
 import TaskFilter from "./TaskFilter"; // For filtering tasks
+import ConfirmationModal from "./ConfirmationModal"; // Import the new modal
 import { getTasks, saveTasks } from "../utils/localStorage"; // For data persistence
 import "./../styles/TaskDashboard.css"; // Component-specific styling
 
 const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
-  const [tasks, setTasks] = useState([]); // State for all tasks
-  const [filter, setFilter] = useState("All"); // State for current filter
-  const [searchTerm, setSearchTerm] = useState(""); // State for search term
-  const isFirstLoad = useRef(true); // Ref to track if it's the first load
+  const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const isFirstLoad = useRef(true);
+
+  // State for the confirmation modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskIdToDelete, setTaskIdToDelete] = useState(null);
 
   // Effect to load tasks when currentUser changes
   useEffect(() => {
     if (currentUser) {
       setTasks(getTasks(currentUser));
     }
-    isFirstLoad.current = true; // Reset for new user session or initial load
-  }, [currentUser]); // Reload tasks when user changes
+    isFirstLoad.current = true;
+  }, [currentUser]);
 
   // Effect to save tasks when they or currentUser change
   useEffect(() => {
-    // Only save if not the first load after user change or initial mount
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
       return;
@@ -30,16 +34,16 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
     if (currentUser) {
       saveTasks(currentUser, tasks);
     }
-  }, [tasks, currentUser]); // Save tasks when they or user changes
+  }, [tasks, currentUser]);
 
   // Add Task function
   const addTask = (title, description, priority, dueDate, tags) => {
     const newTask = {
-      id: Date.now(), // Unique ID for the task
+      id: Date.now(),
       title,
       description,
       completed: false,
-      createdAt: new Date().toISOString(), // ISO string for consistent date handling
+      createdAt: new Date().toISOString(),
       priority,
       dueDate,
       tags,
@@ -72,12 +76,25 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
     );
   };
 
-  // Delete Task function
-  const deleteTask = (id) => {
-    // Use window.confirm for a quick confirmation. Could be replaced with a custom modal for better UX.
-    if (window.confirm("Are you sure you want to delete this task?")) {
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-    }
+  // Function to open delete confirmation modal
+  const handleDeleteClick = (id) => {
+    setTaskIdToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  // Function to confirm deletion
+  const confirmDelete = () => {
+    setTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== taskIdToDelete)
+    );
+    setIsModalOpen(false); // Close modal
+    setTaskIdToDelete(null); // Clear ID
+  };
+
+  // Function to cancel deletion
+  const cancelDelete = () => {
+    setIsModalOpen(false); // Close modal
+    setTaskIdToDelete(null); // Clear ID
   };
 
   // Toggle Complete function
@@ -89,11 +106,9 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
     );
   };
 
-  // Filter and Search Logic - Memoized for performance if needed, but fine as-is for small lists
   const getFilteredAndSearchedTasks = () => {
     let currentTasks = tasks;
 
-    // Apply filter
     switch (filter) {
       case "Completed":
         currentTasks = currentTasks.filter((task) => task.completed);
@@ -102,18 +117,16 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
         currentTasks = currentTasks.filter((task) => !task.completed);
         break;
       default:
-        // "All" tasks - no filtering needed
         break;
     }
 
-    // Apply search term if present
     if (searchTerm) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       currentTasks = currentTasks.filter(
         (task) =>
           task.title.toLowerCase().includes(lowerCaseSearchTerm) ||
           task.description.toLowerCase().includes(lowerCaseSearchTerm) ||
-          (task.tags && // Check if tags exist before attempting to search
+          (task.tags &&
             task.tags.some((tag) =>
               tag.toLowerCase().includes(lowerCaseSearchTerm)
             ))
@@ -127,12 +140,13 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
   return (
     <div className="task-dashboard-container">
       <header className="dashboard-header">
-        <h1>Welcome, {currentUser}!</h1>
+        {/* Added a space after currentUser */}
+        <h1>Welcome, {currentUser}! </h1>
         <div className="header-actions">
           <button onClick={toggleDarkMode} className="dark-mode-toggle">
             {darkMode ? "Light Mode" : "Dark Mode"}
           </button>
-          <button onClick={onLogout} className="logout-button">
+          <button onClick={onLogout} className="logout-button danger-button">
             Logout
           </button>
         </div>
@@ -158,8 +172,16 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
       <TaskList
         tasks={filteredAndSearchedTasks}
         editTask={editTask}
-        deleteTask={deleteTask}
+        deleteTask={handleDeleteClick} // Use handleDeleteClick here
         toggleComplete={toggleComplete}
+      />
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        message="Are you sure you want to delete this task? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
       />
     </div>
   );
