@@ -56,11 +56,11 @@ Before you begin, ensure you have the following installed:
 1.  **Clone the repository:**
 
     ```bash
-    git clone [https://github.com/your-username/task-tracker.git](https://github.com/your-username/task-tracker.git)
+    git clone [https://github.com/thilakjo/task-tracker.git](https://github.com/thilakjo/task-tracker.git)
     cd task-tracker
     ```
 
-    _(Replace `https://github.com/your-username/task-tracker.git` with your actual repository URL)_
+    _(The repository URL is now specific to yours)_
 
 2.  **Install dependencies:**
     ```bash
@@ -85,7 +85,7 @@ This will open the application in your default web browser at http://localhost:3
 
 ### **Part 3: Project Structure**
 
-```markdown
+```
 ## Project Structure
 
 .
@@ -117,6 +117,7 @@ This will open the application in your default web browser at http://localhost:3
 ├── package.json # Project dependencies and scripts
 ├── README.md # This file
 └── ...
+
 ```
 
 ## Usage
@@ -159,7 +160,7 @@ Custom styles for the `react-datepicker` are applied in `src/styles/DatePickerCu
 
 Contributions are welcome! If you have suggestions for improvements, new features, or bug fixes, please follow these steps:
 
-1.  Fork the repository.
+1.  Fork the [repository](https://github.com/thilakjo/task-tracker).
 2.  Create a new branch (`git checkout -b feature/your-feature-name` or `fix/bug-name`).
 3.  Make your changes.
 4.  Commit your changes (`git commit -m 'Add new feature'`).
@@ -167,6 +168,14 @@ Contributions are welcome! If you have suggestions for improvements, new feature
 6.  Open a Pull Request.
 
 Please ensure your code adheres to the existing style and conventions.
+
+## Author
+
+**Thilak S**
+
+- **Portfolio:** [thilakjo.com](https://thilakjo.com)
+- **GitHub:** [thilakjo](https://github.com/thilakjo)
+- **LinkedIn:** [Thilak J](https://www.linkedin.com/in/thilakjo/)
 
 ## License
 
