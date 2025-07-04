@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Login from "./components/Login";
+import TaskDashboard from "./components/TaskDashboard"; // We will create this
+
+import "./styles/App.css"; // Basic app styling
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("taskTrackerUsername");
+    if (storedUsername) {
+      setCurrentUser(storedUsername);
+    }
+  }, []);
+
+  const handleLogin = (username) => {
+    setCurrentUser(username);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("taskTrackerUsername");
+    setCurrentUser(null);
+    localStorage.removeItem("tasks"); // Clear tasks on logout for a clean slate
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {currentUser ? (
+        <TaskDashboard currentUser={currentUser} onLogout={handleLogout} />
+      ) : (
+        <Login onLoginSuccess={handleLogin} />
+      )}
     </div>
   );
 }
