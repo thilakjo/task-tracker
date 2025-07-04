@@ -1,4 +1,5 @@
 /* src/App.css */
+
 /* --- Glassmorphism Base Variables (Light Mode) --- */
 :root {
   --glass-bg-rgb: 255, 255, 255; /* White for glass background */
@@ -49,32 +50,40 @@
   --modal-overlay-bg: rgba(0, 0, 0, 0.4);
   --modal-bg: #f0f4f8; /* A bit more solid for content */
   --modal-shadow: rgba(0, 0, 0, 0.2);
+
+  /* DatePicker custom variables - now directly refer to main vars */
+  --header-text-color-datepicker: var(--header-text-color);
+  --secondary-text-color-datepicker: var(--secondary-text-color);
+  --primary-accent-datepicker: var(--primary-accent);
+  --primary-accent-dark-datepicker: var(--primary-accent-dark);
+  --glass-border-color-datepicker: var(--glass-border-color);
+  --glass-shadow-color-datepicker: var(--glass-shadow-color);
 }
 
 /* --- Dark Mode Variables --- */
 body.dark-mode,
 .App.dark-mode {
-  --glass-bg-rgb: 0, 0, 0;
-  --glass-alpha: 0.2;
-  --glass-border-color: rgba(255, 255, 255, 0.1);
-  --glass-shadow-color: rgba(0, 0, 0, 0.4);
+  --glass-bg-rgb: 0, 0, 0; /* Black for glass background */
+  --glass-alpha: 0.25; /* Slightly more translucent */
+  --glass-border-color: rgba(50, 50, 50, 0.5); /* Darker border for glass */
+  --glass-shadow-color: rgba(0, 0, 0, 0.6); /* More prominent shadow */
 
-  --bg-color: #1a1a2e; /* Deep purple-blue background */
+  --bg-color: #1a1a1a; /* Very dark gray for background */
   --text-color: #e0e0e0; /* Light gray for text */
-  --header-text-color: #61dafb; /* Cyan for headers */
-  --secondary-text-color: #a0a0a0;
+  --header-text-color: #4caf50; /* Keep green for headers */
+  --secondary-text-color: #a0a0a0; /* Lighter gray for secondary text */
 
-  --primary-accent: #61dafb; /* Cyan for primary accent */
-  --primary-accent-dark: #21a1f3; /* Darker cyan for hover */
-  --danger-color: #e57373; /* Lighter red for danger */
-  --danger-dark-color: #ef5350;
-  --info-color: #81d4fa; /* Lighter blue for info */
-  --info-dark-color: #4fc3f7;
+  --primary-accent: #4caf50; /* Keep green for primary accent */
+  --primary-accent-dark: #388e3c; /* Keep darker green for hover */
+  --danger-color: #ef5350; /* Keep red for danger */
+  --danger-dark-color: #d32f2f; /* Keep darker red for hover */
+  --info-color: #2196f3; /* Keep blue for info */
+  --info-dark-color: #1976d2; /* Keep darker blue for hover */
 
-  --input-bg: rgba(0, 0, 0, 0.4);
-  --input-border: rgba(255, 255, 255, 0.2);
-  --input-focus-border: #61dafb;
-  --placeholder-color: #bbb;
+  --input-bg: rgba(30, 30, 30, 0.7); /* Darker translucent input background */
+  --input-border: rgba(100, 100, 100, 0.3); /* Subtle input border */
+  --input-focus-border: #4caf50; /* Keep green for focus border */
+  --placeholder-color: #bbb; /* Light gray for placeholder */
 
   --completed-bg: rgba(
     46,
@@ -82,21 +91,39 @@ body.dark-mode,
     113,
     0.1
   ); /* Darker subtle green for completed */
-  --completed-border: #2ecc71;
+  --completed-border: #2ecc71; /* Green border for completed */
 
-  --tag-bg: rgba(97, 218, 251, 0.1);
-  --tag-text: #61dafb;
-  --tag-border: rgba(97, 218, 251, 0.3);
+  --tag-bg: rgba(76, 175, 80, 0.1); /* Light green for tags */
+  --tag-text: #4caf50; /* Keep green for tag text */
+  --tag-border: rgba(76, 175, 80, 0.3); /* Green border for tags */
 
-  /* Priority colors (dark mode adjusted) */
-  --priority-low-border: #81d4fa;
-  --priority-medium-border: #ffd54f;
-  --priority-high-border: #ef9a9a;
+  /* Priority colors (consistent with light mode) */
+  --priority-low-border: #17a2b8; /* Cyan */
+  --priority-medium-border: #ffc107; /* Amber */
+  --priority-high-border: #dc3545; /* Red */
 
   /* Modal specific */
-  --modal-overlay-bg: rgba(0, 0, 0, 0.6);
-  --modal-bg: #2d3142;
-  --modal-shadow: rgba(0, 0, 0, 0.6);
+  --modal-overlay-bg: rgba(0, 0, 0, 0.7); /* Darker overlay */
+  --modal-bg: #252525; /* Dark gray for modal background */
+  --modal-shadow: rgba(0, 0, 0, 0.8); /* Darker modal shadow */
+
+  /* DatePicker custom variables - adapted for dark mode */
+  --header-text-color-datepicker: var(--header-text-color);
+  --secondary-text-color-datepicker: var(--secondary-text-color);
+  --primary-accent-datepicker: var(--primary-accent);
+  --primary-accent-dark-datepicker: var(--primary-accent-dark);
+  --glass-border-color-datepicker: rgba(
+    50,
+    50,
+    50,
+    0.5
+  ); /* Consistent with main glass border */
+  --glass-shadow-color-datepicker: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Consistent with main glass shadow */
 }
 
 /* --- Base Body and App Styling --- */
@@ -110,9 +137,12 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease; /* Smooth transition for dark mode */
 }
 
-/* If you want to use the Inter font, add this to your index.html <head>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-*/
+/* Global box-sizing for consistent layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 .App {
   text-align: center;

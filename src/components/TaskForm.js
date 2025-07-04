@@ -1,10 +1,22 @@
 // src/components/TaskForm.js
 import React, { useState } from "react";
 import DatePicker from "react-datepicker"; // Import DatePicker
-import "react-datepicker/dist/react-datepicker.css"; // Default DatePicker styles
-import "./../styles/TaskForm.css"; // Component-specific styling
 
-const TaskForm = ({ addTask }) => {
+// 1. Default DatePicker styles should come first
+import "react-datepicker/dist/react-datepicker.css";
+
+// 2. Then your component-specific styles and other related component styles
+import "./../styles/TaskForm.css";
+import "./../styles/TaskFilter.css";
+
+// Removed the problematic import for App.css here, as it's typically imported globally in App.js or index.js
+// If you truly need App.css specific styles here, the path should be '../../App.css'
+
+// 3. YOUR CUSTOM DatePicker styling should be imported LAST to ensure overrides take precedence.
+// The path for DatePickerCustom.css is correct:
+import "./../styles/DatePickerCustom.css";
+
+const TaskForm = ({ addTask, onDatePickerActiveChange }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("Medium");
@@ -106,6 +118,12 @@ const TaskForm = ({ addTask }) => {
           yearDropdownItemNumber={15}
           className="date-picker-input"
           aria-label="Due Date"
+          onCalendarOpen={() =>
+            onDatePickerActiveChange && onDatePickerActiveChange(true)
+          }
+          onCalendarClose={() =>
+            onDatePickerActiveChange && onDatePickerActiveChange(false)
+          }
         />
         <div className="quick-date-buttons">
           <button

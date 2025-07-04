@@ -15,6 +15,8 @@
   flex-wrap: wrap;
   transition: background-color 0.4s ease, border-color 0.4s ease,
     box-shadow 0.4s ease;
+  /* Removed: position: relative; */
+  /* Removed: z-index: 1; */
 }
 
 .filter-button {

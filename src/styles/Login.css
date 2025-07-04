@@ -7,7 +7,7 @@
   justify-content: center;
   min-height: 100vh;
   background-color: var(--bg-color); /* Use global background */
-  font-family: var(--font-family-base);
+  font-family: "Inter", sans-serif;
   color: var(--text-color);
   transition: background-color 0.4s ease, color 0.4s ease;
 }

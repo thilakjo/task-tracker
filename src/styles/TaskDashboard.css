@@ -1,24 +1,25 @@
 /* src/styles/TaskDashboard.css */
 
 .task-dashboard-container {
+  margin-top: 1.5rem;
   font-family: "Inter", sans-serif;
-  max-width: 1000px; /* Slightly wider dashboard */
-  margin: 40px auto; /* More margin top/bottom */
-  padding: 30px;
+  max-width: 1100px; /* Slightly wider dashboard for larger screens /
+  margin: 50px auto; / More margin top/bottom for spacious feel /
+  padding: 35px; / Increased padding /
   background-color: rgba(
-    var(--glass-bg-rgb),
-    var(--glass-alpha)
-  ); /* Glass background */
+  var(--glass-bg-rgb),
+  var(--glass-alpha)
+  ); / Glass background /
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--glass-border-color);
-  border-radius: 25px; /* More pronounced rounded corners */
+  border-radius: 25px; / More pronounced rounded corners /
   box-shadow: 0 12px 40px var(--glass-shadow-color);
   color: var(--text-color);
-  min-height: 80vh; /* Min height to ensure content is visible */
+  min-height: 80vh; / Min height to ensure content is visible /
   display: flex;
   flex-direction: column;
-  gap: 30px; /* More spacing between sections */
+  gap: 30px; / More spacing between sections */
   transition: background-color 0.4s ease, color 0.4s ease,
     border-color 0.4s ease, box-shadow 0.4s ease;
 }
@@ -29,31 +30,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px; /* Reduced margin, gap handles spacing */
+  margin-bottom: 10px; /* Reduced margin, gap handles spacing /
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--input-border); /* Subtle border */
+  border-bottom: 1px solid var(--input-border); / Subtle border /
+  flex-wrap: wrap; / Allow wrapping for responsiveness /
+  gap: 20px; / Adjusted gap for items in header */
 }
 
 .dashboard-header h1 {
   color: var(--header-text-color);
   margin: 0;
-  font-size: 2.8em; /* Larger header */
-  font-weight: 700; /* Bolder */
+  /* Use clamp for fluid font sizing /
+  font-size: clamp(2em, 5vw, 3em); / Scales from 2em (min) to 3em (max) based on viewport width /
+  font-weight: 700; / Bolder /
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  flex-grow: 1; / Allows title to take space /
+  text-align: left; / Align title left */
 }
 
 .header-actions {
-  margin-left: 15rem;
   display: flex;
-  /* Increased gap for more isolation */
-  gap: 25px; /* From 15px to 25px */
+  gap: 20px; /* Adjusted gap for better spacing between buttons /
+  flex-wrap: wrap; / Allow wrapping */
 }
 
 .dark-mode-toggle,
 .logout-button {
-  /* Inherits general button styles */
+  /* Inherits general button styles /
   padding: 10px 20px;
   font-weight: 500;
+  min-width: 120px; / Ensure buttons have a minimum readable width /
+  text-align: center; / Center text within buttons */
 }
 
 .logout-button {
@@ -86,54 +93,90 @@
 }
 
 .search-input {
-  /* Inherits from App.css */
+  /* Inherits from App.css /
   width: 100%;
+  padding: 14px 18px; / Slightly more padding for search input /
+  font-size: 1.05em; / Slightly larger font for search */
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Responsive adjustments /
+  @media (max-width: 768px) {
+  .task-dashboard-container {
+  margin: 30px auto; / Adjust margin for tablets /
+  padding: 25px; / Adjust padding /
+  gap: 25px; / Adjust gap /
+  }
+  .dashboard-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  padding-bottom: 15px; / Slightly less padding for border */
+
+.dashboard-header h1 {
+  font-size: clamp(
+    1.8em,
+    7vw,
+    2.5em
+  ); /* Scale more aggressively for smaller screens /
+  width: 100%; / Ensure title takes full width */
+}
+
+.header-actions {
+  width: 100%;
+  justify-content: stretch; /* Stretch buttons to fill width /
+  gap: 10px; / Smaller gap for buttons on smaller screens */
+}
+
+.dark-mode-toggle,
+.logout-button {
+  flex-grow: 1; /* Allow buttons to grow /
+  max-width: 50%; / Limit individual button width if side-by-side */
+}
+
+.search-input {
+  padding: 12px 15px; /* Adjusted padding /
+  font-size: 1em; / Adjusted font size */
+}
+
+@media (max-width: 550px) {
   .task-dashboard-container {
     margin: 20px auto;
     padding: 20px;
+    border-radius: 20px; /* Slightly smaller border-radius */
     gap: 20px;
   }
+
   .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    gap: 10px;
   }
 
   .dashboard-header h1 {
-    font-size: 2.2em;
+    font-size: clamp(
+      1.5em,
+      8vw,
+      2em
+    ); /* Even more aggressive scaling for very small screens */
   }
 
   .header-actions {
-    padding-left: 3rem;
-    width: 100%;
-    justify-content: space-between;
-    /* Keep original gap for smaller screens if it wraps */
-    gap: 15px; /* Adjusted back for smaller screens */
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px;
   }
 
   .dark-mode-toggle,
   .logout-button {
-    flex-grow: 1;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .task-dashboard-container {
-    margin: 15px auto;
-    padding: 15px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 1.8em;
+    max-width: unset; /* Allow them to take full width when stacked */
+    width: 100%;
   }
 
   .search-input {
     padding: 10px 12px;
     font-size: 0.9em;
   }
+}
+
+.z-index-minus {
+  z-index: -1 !important;
+  position: relative;
+  pointer-events: none;
 }

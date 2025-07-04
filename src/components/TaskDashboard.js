@@ -17,6 +17,9 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
 
+  // State for date picker
+  const [isDatePickerActive, setIsDatePickerActive] = useState(false);
+
   // Effect to load tasks when currentUser changes
   useEffect(() => {
     if (currentUser) {
@@ -161,20 +164,27 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
           aria-label="Search tasks"
         />
       </div>
-      <TaskForm addTask={addTask} />
-      <TaskFilter
-        currentFilter={filter}
-        setFilter={setFilter}
-        allCount={tasks.length}
-        completedCount={tasks.filter((task) => task.completed).length}
-        pendingCount={tasks.filter((task) => !task.completed).length}
+      <TaskForm
+        addTask={addTask}
+        onDatePickerActiveChange={setIsDatePickerActive}
       />
-      <TaskList
-        tasks={filteredAndSearchedTasks}
-        editTask={editTask}
-        deleteTask={handleDeleteClick} // Use handleDeleteClick here
-        toggleComplete={toggleComplete}
-      />
+      <div className={isDatePickerActive ? "z-index-minus" : ""}>
+        <TaskFilter
+          currentFilter={filter}
+          setFilter={setFilter}
+          allCount={tasks.length}
+          completedCount={tasks.filter((task) => task.completed).length}
+          pendingCount={tasks.filter((task) => !task.completed).length}
+        />
+      </div>
+      <div className={isDatePickerActive ? "z-index-minus" : ""}>
+        <TaskList
+          tasks={filteredAndSearchedTasks}
+          editTask={editTask}
+          deleteTask={handleDeleteClick}
+          toggleComplete={toggleComplete}
+        />
+      </div>
 
       {/* Confirmation Modal */}
       <ConfirmationModal

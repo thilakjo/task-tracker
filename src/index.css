@@ -1,7 +1,7 @@
-/* File: task-tracker/src/index.css */
+/* src/index.css */
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: sans-serif; /* This will be overridden by App.css if Inter is loaded */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -1,32 +1,27 @@
-/* Custom styles for react-datepicker to match Apple-like glass theme */
-/* Add this to App.css or a new file like src/styles/DatePickerCustom.css */
+/* src/styles/DatePickerCustom.css */
 
 .react-datepicker-popper {
-  z-index: 9999 !important; /* Increased z-index to prevent overlaying, use !important if needed */
+  position: absolute;
+  z-index: 11001 !important; /* Ensure it's always above modals */
+  isolation: isolate; /* Create a new stacking context */
 }
 
 .react-datepicker {
+  /* Base styling, inherits from root variables */
   background-color: rgba(
     var(--glass-bg-rgb),
-    0.9
-  ); /* More solid glass background */
+    0.95
+  ); /* Slightly more opaque for readability */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border-color);
+  border: 1px solid var(--glass-border-color); /* Use general glass border for consistency */
   border-radius: 15px; /* Rounded corners */
   box-shadow: 0 10px 30px var(--glass-shadow-color);
   padding: 15px;
   font-family: "Inter", sans-serif;
-  color: var(--text-color);
+  color: var(--text-color); /* Main text color */
   transition: background-color 0.4s ease, border-color 0.4s ease,
     box-shadow 0.4s ease, color 0.4s ease;
-}
-
-.dark-mode .react-datepicker {
-  background-color: rgba(
-    var(--glass-bg-rgb),
-    0.95
-  ); /* Slightly less transparent in dark mode */
 }
 
 /* Header */
@@ -43,25 +38,45 @@
 .react-datepicker-year-header {
   font-size: 1.1em;
   font-weight: 600;
-  color: var(--header-text-color); /* Use header text color */
+  color: var(--header-text-color); /* Use main header text color */
   margin-bottom: 10px;
 }
 
 .react-datepicker__navigation {
-  top: 15px; /* Adjust navigation button position */
-  line-height: 1.7; /* Align arrow better */
+  top: 0;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
 }
 
 .react-datepicker__navigation--previous {
-  left: 15px;
+  left: 0;
 }
 .react-datepicker__navigation--next {
-  right: 15px;
+  right: 0;
+}
+
+.react-datepicker__navigation-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  margin: 0 auto;
 }
 
 .react-datepicker__navigation-icon::before {
-  border-color: var(--text-color); /* Arrow color */
-  border-width: 2px 2px 0 0; /* Thicker arrow */
+  border-color: var(--secondary-text-color);
+  border-width: 2px 2px 0 0;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .react-datepicker__navigation--previous:hover
@@ -76,7 +91,7 @@
   margin-bottom: 5px;
 }
 .react-datepicker__day-name {
-  color: var(--secondary-text-color);
+  color: var(--secondary-text-color); /* Use secondary text color */
   font-size: 0.85em;
   text-transform: uppercase;
   font-weight: 600;
@@ -111,14 +126,18 @@
 }
 
 .react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
   background-color: var(--primary-accent);
   color: white;
   font-weight: 600;
 }
 
 .react-datepicker__day--selected:hover,
-.react-datepicker__day--keyboard-selected:hover {
+.react-datepicker__day--keyboard-selected:hover,
+.react-datepicker__day--in-selecting-range:hover,
+.react-datepicker__day--in-range:hover {
   background-color: var(--primary-accent-dark);
 }
 
@@ -167,11 +186,10 @@
 .react-datepicker__year-dropdown,
 .react-datepicker__month-dropdown,
 .react-datepicker__month-year-dropdown {
-  background-color: var(--card-bg-color); /* Match card background */
-  border: 1px solid var(--border-color);
+  background-color: var(--modal-bg); /* Match modal background */
+  border: 1px solid var(--glass-border-color);
   border-radius: 10px;
   box-shadow: 0 4px 15px var(--glass-shadow-color);
-  /* Added z-index for the dropdowns specifically if they still overlay */
   z-index: 10000 !important; /* Higher than popper for dropdowns */
 }
 
@@ -198,6 +216,45 @@
   font-weight: 600;
 }
 
+/* Clear button (x icon) */
+.react-datepicker__close-icon {
+  padding-right: 10%; /* Adjust padding to make space for the icon */
+}
+
 .react-datepicker__close-icon::after {
-  background-color: var(--danger-color); /* Clear button color */
+  content: "×"; /* Use a simple 'x' character for consistency */
+  color: var(--danger-color); /* Red for danger */
+  background-color: transparent; /* No background */
+  border: none; /* No border */
+  border-radius: 0; /* No border radius */
+  font-size: 1.5em; /* Adjust size */
+  line-height: 1; /* Center vertically */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Position relative to the input */
+  transform: translateY(-50%);
+  cursor: pointer;
+  box-shadow: none; /* No shadow */
+  width: auto; /* Allow width to be determined by content */
+  height: auto;
+  padding: 0;
+}
+
+.react-datepicker__close-icon:hover::after {
+  color: var(--danger-dark-color); /* Darker red on hover */
+}
+
+/* Dark mode specific adjustments for DatePicker (if needed, though variables should handle most) */
+body.dark-mode .react-datepicker {
+  /* Variables should already adapt these colors */
+}
+
+/* Ensuring the input text for date picker is readable in dark mode */
+.react-datepicker__input-container input {
+  color: var(
+    --text-color
+  ); /* Ensure date picker input text color follows theme */
 }
