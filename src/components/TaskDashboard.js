@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// src/components/TaskDashboard.js
+import React, { useState, useEffect, useRef } from "react";
 import TaskForm from "./TaskForm"; // For adding new tasks
 import TaskList from "./TaskList"; // For displaying tasks
 import TaskFilter from "./TaskFilter"; // For filtering tasks
@@ -9,31 +10,41 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
   const [tasks, setTasks] = useState([]); // State for all tasks
   const [filter, setFilter] = useState("All"); // State for current filter
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const isFirstLoad = useRef(true); // Ref to track if it's the first load
 
+  // Effect to load tasks when currentUser changes
   useEffect(() => {
-    // Load tasks from localStorage when the component mounts
-    setTasks(getTasks());
-  }, []); // Empty dependency array ensures it runs only once on mount
+    if (currentUser) {
+      setTasks(getTasks(currentUser));
+    }
+    isFirstLoad.current = true; // Reset for new user session or initial load
+  }, [currentUser]); // Reload tasks when user changes
 
+  // Effect to save tasks when they or currentUser change
   useEffect(() => {
-    // Save tasks to localStorage whenever tasks state changes
-    saveTasks(tasks);
-  }, [tasks]); // Dependency array includes 'tasks'
+    // Only save if not the first load after user change or initial mount
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+      return;
+    }
+    if (currentUser) {
+      saveTasks(currentUser, tasks);
+    }
+  }, [tasks, currentUser]); // Save tasks when they or user changes
 
   // Add Task function
   const addTask = (title, description, priority, dueDate, tags) => {
-    // Added priority, dueDate, tags
     const newTask = {
-      id: Date.now(), // Unique ID based on timestamp
-      title, // Required title
-      description, // Optional description
-      completed: false, // Default pending status
-      createdAt: new Date().toISOString(), // Capture creation date/time
-      priority, // Priority level
-      dueDate, // Due date
-      tags, // Array of tags
+      id: Date.now(), // Unique ID for the task
+      title,
+      description,
+      completed: false,
+      createdAt: new Date().toISOString(), // ISO string for consistent date handling
+      priority,
+      dueDate,
+      tags,
     };
-    setTasks((prevTasks) => [...prevTasks, newTask]); // Add new task to state
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   // Edit Task function
@@ -63,7 +74,7 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
 
   // Delete Task function
   const deleteTask = (id) => {
-    // Prompt confirmation before deletion
+    // Use window.confirm for a quick confirmation. Could be replaced with a custom modal for better UX.
     if (window.confirm("Are you sure you want to delete this task?")) {
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     }
@@ -78,7 +89,7 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
     );
   };
 
-  // Filter and Search Logic
+  // Filter and Search Logic - Memoized for performance if needed, but fine as-is for small lists
   const getFilteredAndSearchedTasks = () => {
     let currentTasks = tasks;
 
@@ -90,24 +101,24 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
       case "Pending":
         currentTasks = currentTasks.filter((task) => !task.completed);
         break;
-      default: // 'All'
-      // No filter applied, use all tasks
+      default:
+        // "All" tasks - no filtering needed
+        break;
     }
 
-    // Apply search
+    // Apply search term if present
     if (searchTerm) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       currentTasks = currentTasks.filter(
         (task) =>
           task.title.toLowerCase().includes(lowerCaseSearchTerm) ||
           task.description.toLowerCase().includes(lowerCaseSearchTerm) ||
-          (task.tags &&
+          (task.tags && // Check if tags exist before attempting to search
             task.tags.some((tag) =>
               tag.toLowerCase().includes(lowerCaseSearchTerm)
             ))
       );
     }
-
     return currentTasks;
   };
 
@@ -126,8 +137,6 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
           </button>
         </div>
       </header>
-
-      {/* Search Functionality */}
       <div className="search-bar-container">
         <input
           type="text"
@@ -138,20 +147,14 @@ const TaskDashboard = ({ currentUser, onLogout, darkMode, toggleDarkMode }) => {
           aria-label="Search tasks"
         />
       </div>
-
-      {/* Add Task Form */}
       <TaskForm addTask={addTask} />
-
-      {/* Task Filtering */}
       <TaskFilter
         currentFilter={filter}
         setFilter={setFilter}
-        allCount={tasks.length} // Total count
-        completedCount={tasks.filter((task) => task.completed).length} // Completed count
-        pendingCount={tasks.filter((task) => !task.completed).length} // Pending count
+        allCount={tasks.length}
+        completedCount={tasks.filter((task) => task.completed).length}
+        pendingCount={tasks.filter((task) => !task.completed).length}
       />
-
-      {/* Task List Display */}
       <TaskList
         tasks={filteredAndSearchedTasks}
         editTask={editTask}

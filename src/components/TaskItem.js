@@ -1,3 +1,4 @@
+// src/components/TaskItem.js
 import React, { useState } from "react";
 import "./../styles/TaskItem.css"; // Component-specific styling
 
@@ -5,57 +6,65 @@ const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
   const [isEditing, setIsEditing] = useState(false); // State to control edit mode
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [editedDescription, setEditedDescription] = useState(task.description);
-  const [editedPriority, setEditedPriority] = useState(task.priority); // State for editing priority
-  const [editedDueDate, setEditedDueDate] = useState(task.dueDate); // State for editing due date
+  const [editedPriority, setEditedPriority] = useState(
+    task.priority || "Medium"
+  ); // Default to Medium if not set
+  const [editedDueDate, setEditedDueDate] = useState(task.dueDate || ""); // Ensure it's an empty string for date input
   const [editedTags, setEditedTags] = useState(
     task.tags ? task.tags.join(", ") : ""
   ); // State for editing tags
+  const [editError, setEditError] = useState(""); // State for displaying edit error
 
   const handleEditSave = () => {
-    if (editedTitle.trim()) {
-      // Split tags string into an array, clean, and filter empty strings
-      const tagsArray = editedTags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag !== "");
-
-      // Call editTask from props with all updated fields
-      editTask(
-        task.id,
-        editedTitle.trim(),
-        editedDescription.trim(),
-        editedPriority,
-        editedDueDate,
-        tagsArray
-      );
-      setIsEditing(false); // Exit edit mode
-    } else {
-      alert("Task title cannot be empty!"); // Validation for title
+    const trimmedEditedTitle = editedTitle.trim();
+    if (!trimmedEditedTitle) {
+      setEditError("Task title cannot be empty!"); // Set error message
+      return;
     }
+
+    setEditError(""); // Clear any previous error
+
+    // Split tags string into an array, clean, and filter empty strings
+    const tagsArray = editedTags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "");
+
+    // Call editTask from props with all updated fields
+    editTask(
+      task.id,
+      trimmedEditedTitle,
+      editedDescription.trim(),
+      editedPriority,
+      editedDueDate,
+      tagsArray
+    );
+    setIsEditing(false); // Exit edit mode
   };
 
   // Helper to format creation date/time
   const formatCreationDateTime = (isoString) => {
     const date = new Date(isoString);
-    return date.toLocaleString(); // Uses user's locale
+    // Use toLocaleString for user-friendly, localized date and time
+    return date.toLocaleString();
   };
 
   // Helper to format due date for display
   const formatDisplayDate = (dateString) => {
     if (!dateString) return "N/A";
     // Add T00:00:00 to ensure date is parsed consistently in local timezone
-    // This is important for date inputs which often provide YYYY-MM-DD
+    // This is important for date inputs which often provide YYYY-MM-DD and without time, can lead to timezone issues
     const date = new Date(dateString + "T00:00:00");
-    return date.toLocaleDateString();
+    return date.toLocaleDateString(); // Formats date based on user's locale
   };
 
   return (
     // Apply class for completed tasks and priority for visual distinction
     <div
       className={`task-item ${task.completed ? "completed" : ""} priority-${
-        task.priority ? task.priority.toLowerCase() : "medium"
+        (task.priority || "medium").toLowerCase() // Ensure priority is lowercase for class name
       }`}
-      data-testid="task-item-container"
+      data-testid="task-item-container" // For testing purposes
     >
       <div className="task-content">
         {isEditing ? (
@@ -64,10 +73,23 @@ const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
             <input
               type="text"
               value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
+              onChange={(e) => {
+                setEditedTitle(e.target.value);
+                if (editError) setEditError(""); // Clear error when user types
+              }}
               className="edit-input"
               aria-label="Edit Task Title"
+              aria-describedby={editError ? "edit-task-title-error" : undefined}
             />
+            {editError && (
+              <p
+                id="edit-task-title-error"
+                className="error-message"
+                role="alert"
+              >
+                {editError}
+              </p>
+            )}
             <textarea
               value={editedDescription}
               onChange={(e) => setEditedDescription(e.target.value)}
@@ -108,23 +130,22 @@ const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
             >
               {task.title}
             </h3>
-            {task.description && <p>{task.description}</p>}
+            {task.description && (
+              <p className="task-description">{task.description}</p>
+            )}
             <span className="task-priority">
               Priority: {task.priority || "Medium"}
             </span>{" "}
-            {/* Display priority */}
             <span className="task-date">
               Created: {formatCreationDateTime(task.createdAt)}
             </span>{" "}
-            {/* Display creation date */}
             {task.dueDate && (
               <span className="task-date">
                 Due: {formatDisplayDate(task.dueDate)}
               </span>
             )}{" "}
-            {/* Display due date */}
             {task.tags &&
-              task.tags.length > 0 && ( // Display tags
+              task.tags.length > 0 && ( // Display tags if they exist
                 <div className="task-tags">
                   {task.tags.map((tag, index) => (
                     <span key={index} className="tag-pill">
@@ -168,11 +189,7 @@ const TaskItem = ({ task, editTask, deleteTask, toggleComplete }) => {
         )}
         {/* Delete button */}
         <button
-          onClick={() => {
-            if (window.confirm("Are you sure you want to delete this task?")) {
-              deleteTask(task.id);
-            }
-          }}
+          onClick={() => deleteTask(task.id)} // confirmation is handled in TaskDashboard for consistency
           className="delete-button"
           aria-label="Delete task"
         >

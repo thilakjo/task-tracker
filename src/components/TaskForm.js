@@ -1,3 +1,4 @@
+// src/components/TaskForm.js
 import React, { useState } from "react";
 import "./../styles/TaskForm.css"; // Component-specific styling
 
@@ -7,28 +8,34 @@ const TaskForm = ({ addTask }) => {
   const [priority, setPriority] = useState("Medium"); // State for task priority
   const [dueDate, setDueDate] = useState(""); // State for due date
   const [tags, setTags] = useState(""); // State for comma-separated tags
+  const [error, setError] = useState(""); // State for displaying form error
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title.trim()) {
-      // Split tags string into an array, clean, and filter empty strings
-      const tagsArray = tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag !== "");
+    const trimmedTitle = title.trim();
 
-      // Call addTask from props, passing all new fields
-      addTask(title.trim(), description.trim(), priority, dueDate, tagsArray);
-
-      // Reset form fields after submission
-      setTitle("");
-      setDescription("");
-      setPriority("Medium");
-      setDueDate("");
-      setTags("");
-    } else {
-      alert("Task title is required!"); // Title is required
+    if (!trimmedTitle) {
+      setError("Task title is required!"); // Set error message if title is empty
+      return;
     }
+
+    setError(""); // Clear any previous error
+
+    // Split tags string into an array, clean, and filter empty strings
+    const tagsArray = tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "");
+
+    // Call addTask from props, passing all new fields
+    addTask(trimmedTitle, description.trim(), priority, dueDate, tagsArray);
+
+    // Reset form fields after submission
+    setTitle("");
+    setDescription("");
+    setPriority("Medium");
+    setDueDate("");
+    setTags("");
   };
 
   return (
@@ -37,10 +44,19 @@ const TaskForm = ({ addTask }) => {
         type="text"
         placeholder="Task Title (required)"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          if (error) setError(""); // Clear error when user types
+        }}
         required // HTML5 required attribute
         aria-label="Task Title"
+        aria-describedby={error ? "task-title-error" : undefined}
       />
+      {error && (
+        <p id="task-title-error" className="error-message" role="alert">
+          {error}
+        </p>
+      )}
       <textarea
         placeholder="Task Description (optional)"
         value={description}

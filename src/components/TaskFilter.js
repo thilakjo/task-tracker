@@ -1,3 +1,4 @@
+// src/components/TaskFilter.js
 import React from "react";
 import "./../styles/TaskFilter.css"; // Component-specific styling
 
@@ -10,9 +11,6 @@ const TaskFilter = ({
 }) => {
   return (
     <div className="task-filter-container" role="tablist">
-      {" "}
-      {/* ARIA role for accessibility */}
-      {/* "All" tasks filter button [cite: 24] */}
       <button
         className={`filter-button ${currentFilter === "All" ? "active" : ""}`}
         onClick={() => setFilter("All")}
@@ -21,7 +19,6 @@ const TaskFilter = ({
       >
         All ({allCount})
       </button>
-      {/* "Completed" tasks filter button [cite: 25] */}
       <button
         className={`filter-button ${
           currentFilter === "Completed" ? "active" : ""
@@ -32,7 +29,6 @@ const TaskFilter = ({
       >
         Completed ({completedCount})
       </button>
-      {/* "Pending" tasks filter button [cite: 26] */}
       <button
         className={`filter-button ${
           currentFilter === "Pending" ? "active" : ""
