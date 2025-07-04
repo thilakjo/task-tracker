@@ -60,8 +60,6 @@ Before you begin, ensure you have the following installed:
     cd task-tracker
     ```
 
-    _(The repository URL is now specific to yours)_
-
 2.  **Install dependencies:**
     ```bash
     npm install
@@ -175,7 +173,7 @@ Please ensure your code adheres to the existing style and conventions.
 
 - **Portfolio:** [thilakjo.com](https://thilakjo.com)
 - **GitHub:** [thilakjo](https://github.com/thilakjo)
-- **LinkedIn:** [Thilak J](https://www.linkedin.com/in/thilakjo/)
+- **LinkedIn:** [Thilak](https://www.linkedin.com/in/thilakjo/)
 
 ## License
 
