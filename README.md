@@ -135,6 +135,26 @@ This will open the application in your default web browser at http://localhost:3
     - **Delete Task**: Click the trash can icon. A confirmation modal will appear.
 4.  **Logout**: Click the "Logout" button in the header to return to the login screen. Your tasks will remain saved for your username.
 
+### Live Demo
+
+- https://thilakjo.github.io/task-tracker/
+
+### Screenshots
+
+### Screenshots
+
+![Login page for the Task Tracker app, showing fields for username](screenshots/login.png)
+_This screenshot displays the initial login interface where users can enter their credentials._
+
+![Home page of the Task Tracker app, showing the welcome message, search bar, task input form, and task filter buttons.](screenshots/home-page.png)
+_This image provides an overview of the main dashboard, including task creation and filtering options._
+
+![Date picker calendar open, overlaid on the task input form, allowing selection of a due date.](screenshots/date-picker-opened.png)
+_Shows the interactive date picker component in action, facilitating easy date selection for tasks._
+
+![Task list in dark theme, with a completed task marked with a checkbox and showing the glassmorphism design elements.](screenshots/dark-theme-task-completed.png)
+_Illustrates the application's dark mode and how completed tasks are visually represented within the glassmorphism aesthetic._
+
 ## Styling & Design
 
 The application utilizes a **glassmorphism** design, characterized by frosted glass effects, translucency, and subtle shadows. This aesthetic is achieved using CSS properties like `backdrop-filter: blur()`, `rgba()` colors, and `box-shadow`.
