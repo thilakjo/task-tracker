@@ -1,36 +1,35 @@
+/* src/styles/TaskForm.css */
 .task-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
   padding: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color); /* Uses global variable */
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--card-bg-color); /* Uses global variable */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .task-form input[type="text"],
-.task-form textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+.task-form textarea,
+.task-form select,
+.task-form input[type="date"] {
+  width: calc(100% - 20px); /* Adjust for padding */
+  box-sizing: border-box; /* Include padding in width */
+  /* Other input styles inherited from App.css */
   resize: vertical; /* Allow vertical resizing for textarea */
 }
 
 .task-form button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s;
+  background-color: var(--button-primary-bg); /* Uses global variable */
+  color: var(--button-primary-text); /* Uses global variable */
+  /* Other button styles inherited from App.css */
 }
 
 .task-form button:hover {
-  background-color: #0056b3;
+  filter: brightness(1.1); /* Simple hover effect */
 }
 
 /* Responsive adjustments */
@@ -40,6 +39,7 @@
   }
   .task-form input,
   .task-form textarea,
+  .task-form select,
   .task-form button {
     font-size: 14px;
   }

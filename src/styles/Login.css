@@ -1,15 +1,17 @@
+/* src/styles/Login.css */
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f4f7f6;
+  background-color: var(--bg-color); /* Uses global variable */
   font-family: Arial, sans-serif;
+  transition: background-color 0.3s;
 }
 
 .login-form {
-  background-color: #ffffff;
+  background-color: var(--card-bg-color); /* Uses global variable */
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -17,26 +19,34 @@
   flex-direction: column;
   gap: 15px;
   width: 300px;
+  transition: background-color 0.3s;
+}
+
+.login-form h2 {
+  color: var(--text-color);
+  margin-bottom: 20px;
 }
 
 .login-form input[type="text"] {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+  width: calc(100% - 20px); /* Adjust for padding */
+  box-sizing: border-box; /* Include padding in width */
+  /* Other input styles inherited from App.css */
 }
 
 .login-form button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s;
+  background-color: var(--button-primary-bg); /* Uses global variable */
+  color: var(--button-primary-text); /* Uses global variable */
+  /* Other button styles inherited from App.css */
 }
 
 .login-form button:hover {
-  background-color: #45a049;
+  filter: brightness(1.1); /* Simple hover effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .login-form {
+    width: 85%;
+    padding: 20px;
+  }
 }

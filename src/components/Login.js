@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import "./../styles/Login.css"; // Create this CSS file
+import React, { useState } from "react";
+import "./../styles/Login.css"; // Component-specific styling
 
 const Login = ({ onLoginSuccess }) => {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); // State for username input
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username.trim()) {
-      localStorage.setItem("taskTrackerUsername", username.trim());
-      onLoginSuccess(username.trim());
+      localStorage.setItem("taskTrackerUsername", username.trim()); // Store username in localStorage
+      onLoginSuccess(username.trim()); // Call success callback to redirect
     } else {
-      alert("Please enter a username.");
+      alert("Please enter a username."); // Basic validation
     }
   };
 
@@ -23,7 +23,8 @@ const Login = ({ onLoginSuccess }) => {
           placeholder="Enter your username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
+          required // Username is required
+          aria-label="Username"
         />
         <button type="submit">Login</button>
       </form>
